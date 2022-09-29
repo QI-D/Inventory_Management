@@ -4,6 +4,9 @@ import json
 import swagger_ui_bundle
 
 from connexion import NoContent
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
 
 EVENT_FILE = "events.json"
 MAX_EVENTS = 10

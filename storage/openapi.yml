@@ -1,0 +1,111 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: "http://localhost:8080"
+info:
+  description: API for an inventory management system
+  version: "1.0.0"
+  title: Inventory Management System API
+  license:
+    name: Apache 2.0
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+paths:
+  /expense:
+    post:
+      tags:
+        - expense
+      summary: Place an order
+      operationId: app.placeOrder
+      description: Placing an order through the system
+      responses:
+        "201":
+          description: "Order Placed"
+        "400":
+          description: "invalid input, object invalid"
+        "401":
+          description: "Order has already been placed"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/expenseEvent"
+        description: Order to be placed
+
+  /revenue:
+    post:
+      tags:
+        - revenue
+      summary: Submit revenue report
+      operationId: app.revenueReport
+      description: Submitting revenue report through the system
+      responses:
+        "201":
+          description: "Report has been submitted successfully"
+        "400":
+          description: "invalid input, object invalid"
+        "401":
+          description: "revenue has already been submitted"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/reportEvent"
+        description: revenue report
+
+components:
+  schemas:
+    expenseEvent:
+      type: object
+      required:
+        - order_id
+        - item_id
+        - item_name
+        - quantity
+        - price
+        - timestamp
+      properties:
+        order_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        item_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        item_name:
+          type: string
+          example: Gala Apple
+        quantity:
+          type: integer
+        price:
+          type: number
+        timestamp:
+          format: date-time
+          example: "2016-08-29T09:12:33.001Z"
+    reportEvent:
+      required:
+        - submission_id
+        - store_id
+        - employee_id
+        - revenue
+        - report_period
+        - timestamp
+      properties:
+        submission_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        store_id:
+          type: string
+          example: VAN-001
+        employee_id:
+          type: string
+        revenue:
+          type: number
+        report_period:
+          type: integer
+        timestamp:
+          format: date-time
+          example: "2016-08-29T09:12:33.001Z"
+      type: object

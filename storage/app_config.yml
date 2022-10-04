@@ -1,0 +1,7 @@
+version: 1
+datastore:
+  user: mysql_user
+  password: SecuRe_pwd1
+  hostname: localhost
+  port: 3306
+  db: inventory

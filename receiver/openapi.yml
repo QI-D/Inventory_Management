@@ -83,6 +83,10 @@ components:
         timestamp:
           format: date-time
           example: "2016-08-29T09:12:33.001Z"
+        trace_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
     reportEvent:
       required:
         - submission_id
@@ -108,4 +112,8 @@ components:
         timestamp:
           format: date-time
           example: "2016-08-29T09:12:33.001Z"
+        trace_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
       type: object

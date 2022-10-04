@@ -2,44 +2,51 @@ import connexion
 import datetime
 import json
 import swagger_ui_bundle
+import yaml
+import logging
+import logging.config
+import uuid
+import requests
 
 from connexion import NoContent
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
-EVENT_FILE = "events.json"
-MAX_EVENTS = 10
-
-
-def recent_events(body, request_data, data=[]):
-    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
-    data.insert(0, {"received_timestamp":timestamp, "request_data": request_data})
-
-    if len(data) == MAX_EVENTS:
-        with open(EVENT_FILE, 'w+') as f:
-            json.dump(data, f, indent=4)
-        data = []
-
-    return data
-
 def placeOrder(body):
-    request_data = f"You have ordered {body['quantity']} {body['item_name']}."
+    trace_id = str(uuid.uuid4())
+    body["trace_id"] = trace_id
 
-    data = recent_events(body, request_data)
+    headers = {"content-type": "application/json"}
+    response = requests.post(app_config['expenseEvent']['url'], json=body, headers=headers)
+    logging.info(f'Reveived event expenseEvent request with a trace id of {trace_id}')
+    logging.info(f'Returned event expenseEvent response {trace_id} with status {response.status_code}')
 
-    return data, 201
+    return NoContent, 201
 
 def revenueReport(body):
-    request_data = f"You have submitted a revenue report with ${body['revenue']} in {body['report_period']} days."
+    trace_id = str(uuid.uuid4())
+    body["trace_id"] = trace_id
 
-    data = recent_events(body, request_data)
+    headers = {"content-type": "application/json"}
+    response = requests.post(app_config['revenueEvent']['url'], json=body, headers=headers)
+    logging.info(f'Reveived event revenueEvent request with a trace id of {trace_id}')
+    logging.info(f'Returned event revenueEvent response {trace_id} with status {response.status_code}')
 
-    return data, 201
+    return NoContent, 201
 
 
 app = connexion.FlaskApp(__name__, specification_dir='')
 app.add_api("openapi.yml", strict_validation=True, validate_responses=True)
+
+with open('app_config.yml', 'r') as f:
+    app_config = yaml.safe_load(f.read())
+
+with open('log_config.yml', 'r') as f:
+    log_config = yaml.safe_load(f.read())
+    logging.config.dictConfig(log_config)
+
+logger = logging.getLogger('basicLogger')
 
 if __name__ == "__main__":
     app.run(port=8080)

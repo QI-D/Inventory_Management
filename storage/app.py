@@ -10,7 +10,8 @@ from revenue import Revenue
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-DB_ENGINE = create_engine("sqlite:///business.sqlite")
+
+DB_ENGINE = create_engine('mysql+pymysql://mysql_user:SecuRe_pwd1@localhost:3306/inventory')
 Base.metadata.bind = DB_ENGINE
 DB_SESSION = sessionmaker(bind=DB_ENGINE)
 

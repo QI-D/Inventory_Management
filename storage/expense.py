@@ -16,8 +16,9 @@ class Expense(Base):
     price = Column(DECIMAL, nullable=False)
     timestamp = Column(String(100), nullable=False)
     date_created = Column(DateTime, nullable=False)
+    trace_id = Column(String(36), nullable=False)
 
-    def __init__(self, order_id, item_id, item_name, quantity, price, timestamp):
+    def __init__(self, order_id, item_id, item_name, quantity, price, timestamp, trace_id):
         """ Initializes a expense """
         self.order_id = order_id
         self.item_id = item_id
@@ -26,6 +27,7 @@ class Expense(Base):
         self.price = price
         self.timestamp = timestamp
         self.date_created = datetime.datetime.now() # Sets the date/time record is created
+        self.trace_id = trace_id
 
     def to_dict(self):
         """ Dictionary Representation of a expense """
@@ -38,5 +40,6 @@ class Expense(Base):
         dict['price'] = self.price
         dict['timestamp'] = self.timestamp
         dict['date_created'] = self.date_created
+        dict['trace_id'] = self.trace_id
 
         return dict

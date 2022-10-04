@@ -15,8 +15,9 @@ class Revenue(Base):
     report_period = Column(Integer, nullable=False)
     timestamp = Column(String(100), nullable=False)
     date_created = Column(DateTime, nullable=False)
+    trace_id = Column(String(36), nullable=False)
 
-    def __init__(self, submission_id, store_id, employee_id, revenue, report_period, timestamp):
+    def __init__(self, submission_id, store_id, employee_id, revenue, report_period, timestamp, trace_id):
         """ Initializes a revenue report """
         self.submission_id = submission_id
         self.store_id = store_id
@@ -25,6 +26,7 @@ class Revenue(Base):
         self.report_period = report_period
         self.timestamp = timestamp
         self.date_created = datetime.datetime.now() # Sets the date/time record is created
+        self.trace_id = trace_id
 
     def to_dict(self):
         """ Dictionary Representation of a revenue report """
@@ -37,5 +39,6 @@ class Revenue(Base):
         dict['report_period'] = self.report_period
         dict['timestamp'] = self.timestamp
         dict['date_created'] = self.date_created
+        dict['trace_id'] = self.trace_id
 
         return dict

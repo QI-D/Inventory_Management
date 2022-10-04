@@ -1,0 +1,5 @@
+version: 1
+expenseEvent:
+  url: http://localhost:8090/expense
+revenueEvent:
+  url: http://localhost:8090/revenue

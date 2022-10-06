@@ -1,6 +1,5 @@
 openapi: 3.0.0
 servers:
-  # Added by API Auto Mocking Plugin
   - description: SwaggerHub API Auto Mocking
     url: "http://localhost:8080"
 info:
@@ -52,6 +51,74 @@ paths:
             schema:
               $ref: "#/components/schemas/reportEvent"
         description: revenue report
+
+  /getExpense:
+    get:
+      tags:
+        - getExpense
+      summary: Get the expenses
+      operationId: app.getExpense
+      description: Getting the expenses
+      parameters:
+        - name: timestamp
+          in: query
+          description: Limits the number of items on a page
+          schema:
+            type: string
+            format: date-time
+            example: "2016-08-29T09:12:33.001Z"
+      responses:
+        "200":
+          description: Successfully returned a list of expenses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/expenseEvent"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /getRevenue:
+    get:
+      tags:
+        - getRevenue
+      summary: Get the revenue reported
+      operationId: app.getRevenue
+      description: Getting the revenue reported
+      parameters:
+        - name: timestamp
+          in: query
+          description: Limits the number of items on a page
+          schema:
+            type: string
+            format: date-time
+            example: "2016-08-29T09:12:33.001Z"
+      responses:
+        "200":
+          description: Successfully returned a list of revenue reports
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/reportEvent"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
 
 components:
   schemas:

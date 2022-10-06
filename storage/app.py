@@ -64,6 +64,40 @@ def revenueReport(body):
     return NoContent, 201
 
 
+def getExpense(timestamp):
+
+    session = DB_SESSION()
+    timestamp_datetime = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%SZ")
+    expenses = session.query(Expense).filter(Expense.date_created >= timestamp_datetime)
+
+    results_list = []
+    for expense in expenses:
+        results_list.append(expense.to_dict())
+    print(results_list)
+
+    session.close()
+    logger.info("Query for get expenses after %s returns %d results" % (timestamp, len(results_list)))
+
+    return results_list, 200
+
+
+def getRevenue(timestamp):
+
+    session = DB_SESSION()
+    timestamp_datetime = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%SZ")
+    revenue_reports = session.query(Revenue).filter(Revenue.date_created >= timestamp_datetime)
+
+    results_list = []
+    for revenue_report in revenue_reports:
+        results_list.append(revenue_report.to_dict())
+    print(results_list)
+
+    session.close()
+    logger.info("Query for get revenue report after %s returns %d results" % (timestamp, len(results_list)))
+
+    return results_list, 200
+
+
 app = connexion.FlaskApp(__name__, specification_dir='')
 app.add_api("openapi.yml", strict_validation=True, validate_responses=True)
 

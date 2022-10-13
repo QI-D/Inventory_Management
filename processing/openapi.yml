@@ -1,0 +1,57 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: "http://localhost:8100"
+info:
+  description: API for an inventory management system
+  version: "1.0.0"
+  title: Inventory Management System API
+  license:
+    name: Apache 2.0
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+paths:
+  /stats:
+    get:
+      summary: Gets the event stats
+      operationId: app.get_stats
+      description: Gets expense and revenue statistics
+      responses:
+        "200":
+          description: Successfully returned a list of events
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: "#/components/schemas/stats"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+components:
+  schemas:
+    stats:
+      type: object
+      required:
+        - total_expense
+        - total_item
+        - popular_item
+        - max_quantity
+        - daily_revenue
+      properties:
+        total_expense:
+          type: number
+        total_item:
+          type: integer
+        popular_item:
+          type: string
+        max_quantity:
+          type: integer
+        daily_revenue:
+          type: number

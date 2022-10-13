@@ -14,7 +14,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
-DB_ENGINE = create_engine('mysql+pymysql://mysql_user:SecuRe_pwd1@localhost:3306/inventory')
+with open('app_config.yml', 'r') as f:
+    app_config = yaml.safe_load(f.read())
+
+DB_ENGINE = create_engine(f'mysql+pymysql://{app_config["datastore"]["user"]}:{app_config["datastore"]["password"]}@{app_config["datastore"]["hostname"]}:{app_config["datastore"]["port"]}/{app_config["datastore"]["db"]}')
 Base.metadata.bind = DB_ENGINE
 DB_SESSION = sessionmaker(bind=DB_ENGINE)
 
@@ -100,9 +103,6 @@ def getRevenue(timestamp):
 
 app = connexion.FlaskApp(__name__, specification_dir='')
 app.add_api("openapi.yml", strict_validation=True, validate_responses=True)
-
-with open('app_config.yml', 'r') as f:
-    app_config = yaml.safe_load(f.read())
 
 with open('log_config.yml', 'r') as f:
     log_config = yaml.safe_load(f.read())

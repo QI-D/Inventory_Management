@@ -1,5 +1,5 @@
 from decimal import Decimal
-from sqlalchemy import Column, Integer, String, DateTime, DECIMAL
+from sqlalchemy import Column, Integer, String, DateTime, DECIMAL, Float
 from base import Base
 import datetime
 
@@ -13,7 +13,7 @@ class Expense(Base):
     item_id = Column(String(36), nullable=False)
     item_name = Column(String(250), nullable=False)
     quantity = Column(Integer, nullable=False)
-    price = Column(DECIMAL, nullable=False)
+    price = Column(Float, nullable=False)
     timestamp = Column(String(100), nullable=False)
     date_created = Column(DateTime, nullable=False)
     trace_id = Column(String(36), nullable=False)

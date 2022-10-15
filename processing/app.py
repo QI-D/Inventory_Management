@@ -86,9 +86,11 @@ def populate_stats():
 
         total_expense += float(event["price"]) * int(event["quantity"])
         total_item += int(event["quantity"])
+        logger.debug(f"Event processed:\n{event}\n")
 
     for event in revenue_json:
         daily_revenue = float(event["revenue"]) / int(event["report_period"])
+        logger.debug(f"Event processed:\n{event}\n")
 
     last_updated = curr_time
 

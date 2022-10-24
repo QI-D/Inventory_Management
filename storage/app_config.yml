@@ -1,6 +1,6 @@
 version: 1
 datastore:
-  user: mysql_user
+  user: root
   password: SecuRe_pwd1
   # hostname: localhost
   hostname: ec2-34-230-81-97.compute-1.amazonaws.com

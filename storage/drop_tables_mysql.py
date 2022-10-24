@@ -1,7 +1,7 @@
 import mysql.connector
 
-db_conn = mysql.connector.connect(host="localhost",
-                                  user="mysql_user",
+db_conn = mysql.connector.connect(host="ec2-34-230-81-97.compute-1.amazonaws.com",
+                                  user="root",
                                   password="SecuRe_pwd1",
                                   database="inventory")
 

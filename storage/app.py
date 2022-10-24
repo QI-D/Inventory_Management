@@ -40,7 +40,8 @@ def placeOrder(body):
     session.commit()
     session.close()
 
-    logging.info(f'Stored event expenseEvent with a trace id of {trace_id}')
+    logger.info(f'Stored event expenseEvent with a trace id of {trace_id}')
+    logger.info(f'Connecting to DB at {app_config["datastore"]["hostname"]} on port {app_config["datastore"]["port"]}')
 
     return NoContent, 201
 
@@ -62,7 +63,9 @@ def revenueReport(body):
     session.commit()
     session.close()
 
-    logging.info(f'Stored event revenueEvent with a trace id of {trace_id}')
+    logger.info(f'Stored event revenueEvent with a trace id of {trace_id}')
+    
+    logger.info(f'Connecting to DB at {app_config["datastore"]["hostname"]} on port {app_config["datastore"]["port"]}')
 
     return NoContent, 201
 
@@ -110,8 +113,6 @@ with open('log_config.yml', 'r') as f:
 
 logger = logging.getLogger('basicLogger')
 
-
-logger.info(f'Connecting to DB at {app_config["datastore"]["hostname"]} on port {app_config["datastore"]["port"]}')
 
 if __name__ == "__main__":
     app.run(port=8090)

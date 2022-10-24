@@ -2,6 +2,7 @@ version: 1
 datastore:
   user: mysql_user
   password: SecuRe_pwd1
-  hostname: localhost
+  # hostname: localhost
+  hostname: ec2-34-230-81-97.compute-1.amazonaws.com
   port: 3306
   db: inventory

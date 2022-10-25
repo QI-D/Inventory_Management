@@ -1,0 +1,137 @@
+openapi: 3.0.0
+# servers:
+#   - description: SwaggerHub API Auto Mocking
+#     url: "http://localhost:8080"
+info:
+  description: This API provides audit info
+  version: "1.0.0"
+  title: Audit API
+paths:
+  /expenseEvent:
+    get:
+      tags:
+        - expenseEvent
+      summary: Get the expenseEvent
+      operationId: app.expense_event
+      description: Getting the expenseEvent
+      parameters:
+        - name: index
+          in: query
+          description: Gets expense at the index in the event store
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Successfully returned a list of expenses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/expenseEvent"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /revenueEvent:
+    get:
+      tags:
+        - revenueEvent
+      summary: Get the revenueEvent
+      operationId: app.revenue_event
+      description: Gets revenue report at the index in the event store
+      parameters:
+        - name: index
+          in: query
+          description: Limits the number of items on a page
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Successfully returned a list of revenue reports
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/reportEvent"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+components:
+  schemas:
+    expenseEvent:
+      type: object
+      required:
+        - order_id
+        - item_id
+        - item_name
+        - quantity
+        - price
+        - timestamp
+      properties:
+        order_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        item_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        item_name:
+          type: string
+          example: Gala Apple
+        quantity:
+          type: integer
+        price:
+          type: number
+        timestamp:
+          format: date-time
+          example: "2016-08-29T09:12:33.001Z"
+        trace_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+    reportEvent:
+      required:
+        - submission_id
+        - store_id
+        - employee_id
+        - revenue
+        - report_period
+        - timestamp
+      properties:
+        submission_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        store_id:
+          type: string
+          example: VAN-001
+        employee_id:
+          type: string
+        revenue:
+          type: number
+        report_period:
+          type: integer
+        timestamp:
+          format: date-time
+          example: "2016-08-29T09:12:33.001Z"
+        trace_id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      type: object

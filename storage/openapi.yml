@@ -10,48 +10,6 @@ info:
     name: Apache 2.0
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 paths:
-  /expense:
-    post:
-      tags:
-        - expense
-      summary: Place an order
-      operationId: app.placeOrder
-      description: Placing an order through the system
-      responses:
-        "201":
-          description: "Order Placed"
-        "400":
-          description: "invalid input, object invalid"
-        "401":
-          description: "Order has already been placed"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/expenseEvent"
-        description: Order to be placed
-
-  /revenue:
-    post:
-      tags:
-        - revenue
-      summary: Submit revenue report
-      operationId: app.revenueReport
-      description: Submitting revenue report through the system
-      responses:
-        "201":
-          description: "Report has been submitted successfully"
-        "400":
-          description: "invalid input, object invalid"
-        "401":
-          description: "revenue has already been submitted"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/reportEvent"
-        description: revenue report
-
   /getExpense:
     get:
       tags:

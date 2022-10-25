@@ -12,6 +12,9 @@ from expense import Expense
 from revenue import Revenue
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from pykafka import KafkaClient
+from pykafka.common import OffsetType
+from threading import Thread
 
 
 with open('app_config.yml', 'r') as f:
@@ -22,17 +25,17 @@ Base.metadata.bind = DB_ENGINE
 DB_SESSION = sessionmaker(bind=DB_ENGINE)
 
 
-def placeOrder(body):
+def placeOrder(payload):
 
-    trace_id = body['trace_id']
+    trace_id = payload['trace_id']
     session = DB_SESSION()
 
-    expense = Expense(body['order_id'],
-                      body['item_id'],
-                      body['item_name'],
-                      body['quantity'],
-                      body['price'],
-                      body['timestamp'],
+    expense = Expense(payload['order_id'],
+                      payload['item_id'],
+                      payload['item_name'],
+                      payload['quantity'],
+                      payload['price'],
+                      payload['timestamp'],
                       trace_id)
 
     session.add(expense)
@@ -43,19 +46,19 @@ def placeOrder(body):
     logger.info(f'Stored event expenseEvent with a trace id of {trace_id}')
     logger.info(f'Connecting to DB at {app_config["datastore"]["hostname"]} on port {app_config["datastore"]["port"]}')
 
-    return NoContent, 201
+    return "Saved expense to db"
 
-def revenueReport(body):
+def revenueReport(payload):
 
-    trace_id = body['trace_id']
+    trace_id = payload['trace_id']
     session = DB_SESSION()
 
-    revenue = Revenue(body['submission_id'],
-                      body['store_id'],
-                      body['employee_id'],
-                      body['revenue'],
-                      body['report_period'],
-                      body['timestamp'],
+    revenue = Revenue(payload['submission_id'],
+                      payload['store_id'],
+                      payload['employee_id'],
+                      payload['revenue'],
+                      payload['report_period'],
+                      payload['timestamp'],
                       trace_id)
 
     session.add(revenue)
@@ -67,7 +70,7 @@ def revenueReport(body):
     
     logger.info(f'Connecting to DB at {app_config["datastore"]["hostname"]} on port {app_config["datastore"]["port"]}')
 
-    return NoContent, 201
+    return "Saved revenue report to db"
 
 
 def getExpense(timestamp):
@@ -104,6 +107,36 @@ def getRevenue(timestamp):
     return results_list, 200
 
 
+def process_messages():
+    """ Process event messages """
+
+    hostname = f"{app_config['events']['hostname']}:{app_config['events']['port']}"
+    client = KafkaClient(hosts=hostname)
+    topic = client.topics[str.encode(app_config['events']['topic'])]
+
+    # Create a consume on a consumer group, that only reads new messages
+    # # (uncommitted messages) when the service re-starts (i.e., it doesn't
+    # read all the old messages from the history in the message queue).
+    consumer = topic.get_simple_consumer(consumer_group=b'event_group',
+                                         reset_offset_on_start=False,
+                                         auto_offset_reset=OffsetType.LATEST)
+
+    # This is blocking - it will wait for a new message
+    for msg in consumer:
+        msg_str = msg.value.decode('utf-8')
+        msg = json.loads(msg_str)
+        logger.info(f"Message : {msg}")
+
+        payload = msg["payload"]
+
+        if msg["type"] == "expenseEvent":
+            placeOrder(payload)
+        elif msg["type"] == "revenueEvent":
+            revenueReport(payload)
+
+        # Commit the new message as being read
+        consumer.commit_offsets()
+
 app = connexion.FlaskApp(__name__, specification_dir='')
 app.add_api("openapi.yml", strict_validation=True, validate_responses=True)
 
@@ -115,4 +148,7 @@ logger = logging.getLogger('basicLogger')
 
 
 if __name__ == "__main__":
+    t1 = Thread(target=process_messages)
+    t1.setDaemon(True)
+    t1.start()
     app.run(port=8090)

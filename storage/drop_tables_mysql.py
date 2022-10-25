@@ -1,9 +1,13 @@
 import mysql.connector
+import yaml
 
-db_conn = mysql.connector.connect(host="ec2-34-230-81-97.compute-1.amazonaws.com",
-                                  user="mysql_user",
-                                  password="SecuRe_pwd1",
-                                  database="inventory")
+with open('app_config.yml', 'r') as f:
+    app_config = yaml.safe_load(f.read())
+
+db_conn = mysql.connector.connect(host=app_config["datastore"]["host"],
+                                  user=app_config["datastore"]["user"],
+                                  password=app_config["datastore"]["hostname"],
+                                  database=app_config["datastore"]["db"])
 
 db_cursor = db_conn.cursor()
 db_cursor.execute(''' DROP TABLE expense, revenue ''')

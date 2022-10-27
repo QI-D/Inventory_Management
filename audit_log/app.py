@@ -1,5 +1,4 @@
 import connexion
-import datetime
 import json
 import swagger_ui_bundle
 import yaml
@@ -79,5 +78,5 @@ logger = logging.getLogger('basicLogger')
 
 
 if __name__ == "__main__":
-    app.run(port=9000)
+    app.run(port=8110)
 

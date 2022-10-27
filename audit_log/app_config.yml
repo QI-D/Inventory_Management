@@ -3,10 +3,10 @@ datastore:
   user: mysql_user
   password: SecuRe_pwd1
   # hostname: localhost
-  hostname: ec2-44-206-224-66.compute-1.amazonaws.com
+  hostname: ec2-3-87-61-46.compute-1.amazonaws.com
   port: 3306
   db: inventory
 events:
-  hostname: ec2-44-206-224-66.compute-1.amazonaws.com
+  hostname: ec2-3-87-61-46.compute-1.amazonaws.com
   port: 9092
   topic: events

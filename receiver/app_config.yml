@@ -1,9 +1,9 @@
 version: 1
 expenseEvent:
-  url: http://localhost:8090/expense
+  url: http://storage:8090/expense
 revenueEvent:
-  url: http://localhost:8090/revenue
+  url: http://storage:8090/revenue
 events:
-  hostname: ec2-3-87-61-46.compute-1.amazonaws.com
+  hostname: kafka
   port: 9092
   topic: events

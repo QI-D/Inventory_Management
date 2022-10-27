@@ -4,6 +4,6 @@ datastore:
 scheduler:
   period_sec: 5
   getExpense:
-    url: http://localhost:8090/getExpense
+    url: http://storage:8090/getExpense
   getRevenue:
-    url: http://localhost:8090/getRevenue
+    url: http://storage:8090/getRevenue

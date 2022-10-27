@@ -2,11 +2,10 @@ version: 1
 datastore:
   user:
   password:
-  # hostname: localhost
-  hostname: ec2-3-87-61-46.compute-1.amazonaws.com
+  hostname: db
   port: 3306
   db: inventory
 events:
-  hostname: ec2-3-87-61-46.compute-1.amazonaws.com
+  hostname: kafka
   port: 9092
   topic: events

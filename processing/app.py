@@ -1,4 +1,3 @@
-from asyncio import current_task
 import connexion
 import datetime
 import json

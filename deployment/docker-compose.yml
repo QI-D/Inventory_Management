@@ -63,7 +63,6 @@ services:
     depends_on:
       - storage
     image: processing:latest
-    network_mode: "host"
     ports:
       - "8100:8100"
 

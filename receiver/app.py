@@ -6,11 +6,8 @@ import yaml
 import logging
 import logging.config
 import uuid
-import requests
 
 from connexion import NoContent
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 from pykafka import KafkaClient
 
 

@@ -6,7 +6,6 @@ import swagger_ui_bundle
 import yaml
 import logging
 import logging.config
-import uuid
 import requests
 
 from apscheduler.schedulers.background import BackgroundScheduler

@@ -1,7 +1,7 @@
 version: 1
 datastore:
-  user: mysql_user
-  password: SecuRe_pwd1
+  user:
+  password:
   # hostname: localhost
   hostname: ec2-3-87-61-46.compute-1.amazonaws.com
   port: 3306

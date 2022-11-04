@@ -73,6 +73,14 @@ services:
     ports:
       - "8110:8110"
 
+  dashboard:
+    image: dashboard:latest
+    ports:
+    - "3000:3000"
+    depends_on:
+    - "processing"
+    - "audit_log"
+
 # Names our volume
 volumes:
   my-db:

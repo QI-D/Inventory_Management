@@ -10,6 +10,7 @@ import requests
 from apscheduler.schedulers.background import BackgroundScheduler
 from base import Base
 from connexion import NoContent
+from flask_cors import CORS, cross_origin
 from sqlalchemy import create_engine
 from sqlalchemy import func
 from sqlalchemy.orm import sessionmaker
@@ -122,6 +123,10 @@ def get_stats():
 
 
 app = connexion.FlaskApp(__name__, specification_dir='')
+
+CORS(app.app)
+app.app.config['CORS_HEADERS'] = 'Content-Type'
+
 app.add_api("openapi.yml", strict_validation=True, validate_responses=True)
 
 with open('log_conf.yml', 'r') as f:

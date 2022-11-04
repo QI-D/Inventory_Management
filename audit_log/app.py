@@ -5,6 +5,7 @@ import yaml
 import logging
 import logging.config
 
+from flask_cors import CORS, cross_origin
 from pykafka import KafkaClient
 
 def expense_event(index):
@@ -65,6 +66,10 @@ def revenue_event(index):
 
 
 app = connexion.FlaskApp(__name__, specification_dir='')
+
+CORS(app.app)
+app.app.config['CORS_HEADERS'] = 'Content-Type'
+
 app.add_api("openapi.yml", strict_validation=True, validate_responses=True)
 
 with open('app_config.yml', 'r') as f:

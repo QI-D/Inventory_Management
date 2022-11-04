@@ -40,10 +40,10 @@ export default function AppStats() {
 						</tr>
 						<tr>
 							<td># Total Price: {stats['total_expense']}</td>
-							<td># Popular Item: {stats['popular_item']}</td>
+							<td># Daily Revenue: {stats['daily_revenue']}</td>
 						</tr>
 						<tr>
-							<td colspan="2">Daily Revenue: {stats['daily_revenue']}</td>
+							<td colspan="2">Popular Item: {stats['popular_item']}</td>
 						</tr>
 						<tr>
 							<td colspan="2">Max Quantity: {stats['max_quantity']}</td>

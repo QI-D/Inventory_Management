@@ -13,10 +13,10 @@ services:
     hostname: kafka
     environment:
       KAFKA_CREATE_TOPICS: "events:1:1" # topic:partition:replicas
-      KAFKA_ADVERTISED_HOST_NAME: ec2-3-87-61-46.compute-1.amazonaws.com # docker-machine ip
+      KAFKA_ADVERTISED_HOST_NAME: ec2-35-174-107-21.compute-1.amazonaws.com # docker-machine ip
       KAFKA_LISTENERS: INSIDE://:29092,OUTSIDE://:9092
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:29092,OUTSIDE://ec2-3-87-61-46.compute-1.amazonaws.com:9092
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:29092,OUTSIDE://ec2-35-174-107-21.compute-1.amazonaws.com:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     volumes:
@@ -76,10 +76,10 @@ services:
   dashboard:
     image: dashboard:latest
     ports:
-    - "3000:3000"
+      - "3000:3000"
     depends_on:
-    - "processing"
-    - "audit_log"
+      - "processing"
+      - "audit_log"
 
 # Names our volume
 volumes:

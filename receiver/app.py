@@ -6,6 +6,7 @@ import yaml
 import logging
 import logging.config
 import uuid
+import time
 
 from connexion import NoContent
 from pykafka import KafkaClient
@@ -15,8 +16,6 @@ def placeOrder(body):
     trace_id = str(uuid.uuid4())
     body["trace_id"] = trace_id
 
-    client = KafkaClient(hosts=f"{app_config['events']['hostname']}:{app_config['events']['port']}")
-    topic = client.topics[str.encode(app_config['events']['topic'])]
     producer = topic.get_sync_producer()
     msg = {
         "type": "expenseEvent",
@@ -34,8 +33,6 @@ def revenueReport(body):
     trace_id = str(uuid.uuid4())
     body["trace_id"] = trace_id
 
-    client = KafkaClient(hosts=f"{app_config['events']['hostname']}:{app_config['events']['port']}")
-    topic = client.topics[str.encode(app_config['events']['topic'])]
     producer = topic.get_sync_producer()
     msg = {
         "type": "revenueEvent",
@@ -61,6 +58,22 @@ with open('log_config.yml', 'r') as f:
     logging.config.dictConfig(log_config)
 
 logger = logging.getLogger('basicLogger')
+
+# connect to Kafka when receiver service starts instead of making connection in each endpoint
+retry = 0
+max_retry = app_config['retry']['max_retry']
+sleep = app_config['retry']['sleep']
+hostname = f"{app_config['events']['hostname']}:{app_config['events']['port']}"
+
+while retry < max_retry:
+    retry += 1
+    try:
+        logger.info(f"{retry} attempt to connect to Kafka...")
+        client = KafkaClient(hosts=hostname)
+        topic = client.topics[str.encode(app_config['events']['topic'])]
+    except Exception as e:
+        logger.error(f"Failed to connect to Kafka at attempt {retry}. Retrying in {sleep} seconds, {max_retry - retry} remaining... ")
+        time.sleep(sleep)
 
 if __name__ == "__main__":
     app.run(port=8080)

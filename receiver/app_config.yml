@@ -7,3 +7,6 @@ events:
   hostname: kafka
   port: 9092
   topic: events
+retry:
+  max_retry: 5
+  sleep: 5

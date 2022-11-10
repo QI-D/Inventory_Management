@@ -5,6 +5,7 @@ import swagger_ui_bundle
 import yaml
 import logging
 import logging.config
+import time
 
 from connexion import NoContent
 from base import Base
@@ -120,8 +121,20 @@ def process_messages():
     """ Process event messages """
 
     hostname = f"{app_config['events']['hostname']}:{app_config['events']['port']}"
-    client = KafkaClient(hosts=hostname)
-    topic = client.topics[str.encode(app_config['events']['topic'])]
+    
+    retry = 0
+    max_retry = app_config['retry']['max_retry']
+    sleep = app_config['retry']['sleep']
+    while retry < max_retry:
+        retry += 1
+        try:
+            logger.info(f"{retry} attempt to connect to Kafka...")
+            client = KafkaClient(hosts=hostname)
+            topic = client.topics[str.encode(app_config['events']['topic'])]
+        except Exception as e:
+            logger.error(f"Failed to connect to Kafka at attempt {retry}. Retrying in {sleep} seconds, {max_retry - retry} remaining... ")
+            time.sleep(sleep)
+
 
     # Create a consume on a consumer group, that only reads new messages
     # # (uncommitted messages) when the service re-starts (i.e., it doesn't

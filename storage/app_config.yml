@@ -1,6 +1,6 @@
 version: 1
 datastore:
-  user:
+  user: mysql_user
   password:
   hostname: db
   port: 3306

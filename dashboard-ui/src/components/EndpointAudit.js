@@ -9,7 +9,7 @@ export default function EndpointAudit(props) {
     const [index, setIndex] = useState(null);
 
     const getAudit = () => {
-        fetch(`http://ec2-35-174-107-21.compute-1.amazonaws.com:8110/${props.endpoint}?index=${rand_val}`)
+        fetch(`http://ec2-34-234-41-89.compute-1.amazonaws.com:8110/${props.endpoint}?index=${rand_val}`)
             .then(res => res.json())
             .then((result)=>{
 				console.log("Received Audit Results for " + props.endpoint)

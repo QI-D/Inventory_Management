@@ -18,7 +18,14 @@ paths:
       operationId: app.getExpense
       description: Getting the expenses
       parameters:
-        - name: timestamp
+        - name: start_timestamp
+          in: query
+          description: Limits the number of items on a page
+          schema:
+            type: string
+            format: date-time
+            example: "2016-08-29T09:12:33.001Z"
+        - name: end_timestamp
           in: query
           description: Limits the number of items on a page
           schema:
@@ -52,7 +59,14 @@ paths:
       operationId: app.getRevenue
       description: Getting the revenue reported
       parameters:
-        - name: timestamp
+        - name: start_timestamp
+          in: query
+          description: Limits the number of items on a page
+          schema:
+            type: string
+            format: date-time
+            example: "2016-08-29T09:12:33.001Z"
+        - name: end_timestamp
           in: query
           description: Limits the number of items on a page
           schema:

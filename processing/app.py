@@ -40,16 +40,21 @@ def populate_stats():
     curr_time_str = curr_time.strftime("%Y-%m-%dT%H:%M:%SZ")
     # logging.info("Start Periodic Processing")
 
-    expense_response = requests.get(app_config["scheduler"]["getExpense"]["url"], params={"timestamp": curr_time_str})
+    last_updated = curr_time_str
+
+    latest = session.query(Stats).order_by(Stats.last_updated.desc())
+    if len(latest.all()) > 0:
+        last_updated = latest[0].to_dict()["last_updated"].strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    expense_response = requests.get(app_config["getExpense"]["url"], params={"start_timestamp": last_updated, "end_timestamp": curr_time_str})
     expense_status_code = expense_response.status_code
     expense_json = expense_response.json()
     print("expense", expense_response.json(), "\n-----------------\n")
 
-    revenue_response = requests.get(app_config["scheduler"]["getRevenue"]["url"], params={"timestamp": curr_time_str})
+    revenue_response = requests.get(app_config["getRevenue"]["url"], params={"start_timestamp": last_updated, "end_timestamp": curr_time_str})
     revenue_status_code = revenue_response.status_code
     revenue_json = revenue_response.json()
     print("revenue", revenue_response.json())
-    print(len(revenue_json))
 
     if expense_status_code== 200:
         logger.info(f"Received {len(expense_json)} events.")

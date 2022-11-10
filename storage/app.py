@@ -11,6 +11,7 @@ from base import Base
 from expense import Expense
 from revenue import Revenue
 from sqlalchemy import create_engine
+from sqlalchemy import and_
 from sqlalchemy.orm import sessionmaker
 from pykafka import KafkaClient
 from pykafka.common import OffsetType
@@ -73,11 +74,15 @@ def revenueReport(payload):
     return "Saved revenue report to db"
 
 
-def getExpense(timestamp):
+def getExpense(start_timestamp, end_timestamp):
 
     session = DB_SESSION()
-    timestamp_datetime = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%SZ")
-    expenses = session.query(Expense).filter(Expense.date_created >= timestamp_datetime)
+    start_timestamp_datetime = datetime.datetime.strptime(start_timestamp, "%Y-%m-%dT%H:%M:%SZ")
+    end_timestamp_datetime = datetime.datetime.strptime(end_timestamp, "%Y-%m-%dT%H:%M:%SZ")
+
+    expenses = session.query(Expense).filter(
+        and_(Expense.date_created >= start_timestamp_datetime,
+             Expense.date_created <= end_timestamp_datetime))
 
     results_list = []
     for expense in expenses:
@@ -85,16 +90,20 @@ def getExpense(timestamp):
     print(results_list)
 
     session.close()
-    logger.info("Query for get expenses after %s returns %d results" % (timestamp, len(results_list)))
+    logger.info("Query for get expenses after %s returns %d results" % (start_timestamp, len(results_list)))
 
     return results_list, 200
 
 
-def getRevenue(timestamp):
+def getRevenue(start_timestamp, end_timestamp):
 
     session = DB_SESSION()
-    timestamp_datetime = datetime.datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%SZ")
-    revenue_reports = session.query(Revenue).filter(Revenue.date_created >= timestamp_datetime)
+    start_timestamp_datetime = datetime.datetime.strptime(start_timestamp, "%Y-%m-%dT%H:%M:%SZ")
+    end_timestamp_datetime = datetime.datetime.strptime(end_timestamp, "%Y-%m-%dT%H:%M:%SZ")
+
+    revenue_reports = session.query(Revenue).filter(
+        and_(Revenue.date_created >= start_timestamp_datetime,
+             Revenue.date_created <= end_timestamp_datetime))
 
     results_list = []
     for revenue_report in revenue_reports:
@@ -102,7 +111,7 @@ def getRevenue(timestamp):
     print(results_list)
 
     session.close()
-    logger.info("Query for get revenue report after %s returns %d results" % (timestamp, len(results_list)))
+    logger.info("Query for get revenue report after %s returns %d results" % (start_timestamp, len(results_list)))
 
     return results_list, 200
 

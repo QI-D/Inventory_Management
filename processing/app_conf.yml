@@ -3,7 +3,7 @@ datastore:
   filename: stats.sqlite
 scheduler:
   period_sec: 5
-  getExpense:
-    url: http://storage:8090/getExpense
-  getRevenue:
-    url: http://storage:8090/getRevenue
+getExpense:
+  url: http://storage:8090/getExpense
+getRevenue:
+  url: http://storage:8090/getRevenue

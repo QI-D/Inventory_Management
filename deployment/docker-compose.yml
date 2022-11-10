@@ -5,6 +5,8 @@ services:
     ports:
       - "2181"
     hostname: zookeeper
+    volumes:
+      - /home/ubuntu/zookeeper/data:/opt/zookeeper-3.4.13/data
   kafka:
     image: wurstmeister/kafka
     command: [start-kafka.sh]
@@ -19,8 +21,11 @@ services:
       KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:29092,OUTSIDE://ec2-35-174-107-21.compute-1.amazonaws.com:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LOG_DIRS: /kafka/kafka-logs
+      KAFKA_BROKER_ID: 1
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - /home/ubuntu/kafka:/kafka/kafka-logs
     depends_on:
       - "zookeeper"
   db:

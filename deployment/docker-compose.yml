@@ -57,6 +57,7 @@ services:
       - TARGET_ENV=test
     volumes:
       - /home/ubuntu/config/receiver:/config
+      - /home/ubuntu/logs:/logs
     ports:
       - "8080:8080"
 
@@ -69,6 +70,7 @@ services:
       - TARGET_ENV=test
     volumes:
       - /home/ubuntu/config/storage:/config
+      - /home/ubuntu/logs:/logs
     ports:
       - "8090:8090"
 
@@ -80,6 +82,7 @@ services:
       - TARGET_ENV=test
     volumes:
       - /home/ubuntu/config/processing:/config
+      - /home/ubuntu/logs:/logs
     ports:
       - "8100:8100"
 
@@ -91,6 +94,7 @@ services:
       - TARGET_ENV=test
     volumes:
       - /home/ubuntu/config/audit_log:/config
+      - /home/ubuntu/logs:/logs
     ports:
       - "8110:8110"
 

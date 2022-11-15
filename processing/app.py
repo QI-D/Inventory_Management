@@ -6,6 +6,7 @@ import yaml
 import logging
 import logging.config
 import requests
+import os
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from base import Base
@@ -15,14 +16,6 @@ from sqlalchemy import create_engine
 from sqlalchemy import func
 from sqlalchemy.orm import sessionmaker
 from stats import Stats
-
-
-with open('app_conf.yml', 'r') as f:
-    app_config = yaml.safe_load(f.read())
-
-DB_ENGINE = create_engine(f"sqlite:///{app_config['datastore']['filename']}")
-Base.metadata.bind = DB_ENGINE
-DB_SESSION = sessionmaker(bind=DB_ENGINE)
 
 
 def init_scheduler():
@@ -134,11 +127,30 @@ app.app.config['CORS_HEADERS'] = 'Content-Type'
 
 app.add_api("openapi.yml", strict_validation=True, validate_responses=True)
 
-with open('log_conf.yml', 'r') as f:
+if "TARGET_ENV" in os.environ and os.environ["TARGET_ENV"] == "test":
+    print("In Test Environment")
+    app_conf_file = "/config/app_conf.yml"
+    log_conf_file = "/config/log_conf.yml"
+else:
+    print("In Dev Environment")
+    app_conf_file = "app_conf.yml"
+    log_conf_file = "log_conf.yml"
+
+with open(log_conf_file, 'r') as f:
     log_config = yaml.safe_load(f.read())
     logging.config.dictConfig(log_config)
 
+with open(app_conf_file, 'r') as f:
+    app_config = yaml.safe_load(f.read())
+
+DB_ENGINE = create_engine(f"sqlite:///{app_config['datastore']['filename']}")
+Base.metadata.bind = DB_ENGINE
+DB_SESSION = sessionmaker(bind=DB_ENGINE)
+
 logger = logging.getLogger('basicLogger')
+
+logger.info(f"App Conf File: {app_conf_file}")
+logger.info(f"Log Conf File: {log_conf_file}")
 
 if __name__ == "__main__":
     init_scheduler()

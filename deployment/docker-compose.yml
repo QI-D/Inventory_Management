@@ -83,6 +83,7 @@ services:
     volumes:
       - /home/ubuntu/config/processing:/config
       - /home/ubuntu/logs:/logs
+      - processing-db:/data
     ports:
       - "8100:8100"
 
@@ -109,3 +110,4 @@ services:
 # Names our volume
 volumes:
   my-db:
+  processing-db:

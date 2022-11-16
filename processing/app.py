@@ -7,6 +7,7 @@ import logging
 import logging.config
 import requests
 import os
+import sqlite3
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from base import Base
@@ -24,6 +25,26 @@ def init_scheduler():
                   'interval',
                   seconds=app_config['scheduler']['period_sec'])
     sched.start()
+
+
+def create_database():
+    conn = sqlite3.connect(DATABASE)
+
+    c = conn.cursor()
+    c.execute('''
+            CREATE TABLE stats
+            (id INTEGER PRIMARY KEY ASC,
+            total_expense DECIMAL NOT NULL,
+            total_item VARCHAR(100) NOT NULL,
+            popular_item VARCHAR(100) NOT NULL,
+            max_quantity INT NOT NULL,
+            daily_revenue DECIMAL NOT NULL,
+            last_updated VARCHAR(100) NOT NULL)
+            ''')
+    conn.commit()
+    conn.close()
+
+    logger.info("Database created.")
 
 
 def populate_stats():
@@ -143,11 +164,15 @@ with open(log_conf_file, 'r') as f:
 with open(app_conf_file, 'r') as f:
     app_config = yaml.safe_load(f.read())
 
-DB_ENGINE = create_engine(f"sqlite:///{app_config['datastore']['filename']}")
+DATABASE = app_config['datastore']['filename']
+DB_ENGINE = create_engine(f"sqlite:///{DATABASE}")
 Base.metadata.bind = DB_ENGINE
 DB_SESSION = sessionmaker(bind=DB_ENGINE)
 
 logger = logging.getLogger('basicLogger')
+
+if not os.path.isfile(DATABASE):
+    create_database()
 
 logger.info(f"App Conf File: {app_conf_file}")
 logger.info(f"Log Conf File: {log_conf_file}")

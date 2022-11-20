@@ -107,6 +107,11 @@ services:
       - "processing"
       - "audit_log"
 
+  health_check:
+    image: health_check:latest
+    ports:
+      - "8120:8120"
+
 # Names our volume
 volumes:
   my-db:

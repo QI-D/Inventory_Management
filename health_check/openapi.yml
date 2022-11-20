@@ -1,0 +1,49 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: "http://localhost:8120"
+info:
+  description: API for an inventory management system
+  version: "1.0.0"
+  title: Inventory Management System API
+  license:
+    name: Apache 2.0
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+paths:
+  /health:
+    get:
+      summary: health check on the service
+      operationId: app.health
+      description: health check on the service
+      responses:
+        "200":
+          description: service is running
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: "#/components/schemas/health"
+
+components:
+  schemas:
+    health:
+      type: object
+      required:
+        - receiver
+        - storage
+        - processing
+        - audit
+        - last_update
+      properties:
+        receiver:
+          type: string
+        storage:
+          type: string
+        processing:
+          type: string
+        audit:
+          type: string
+        last_update:
+          format: date-time
+          example: "2016-08-29T09:12:33.001Z"

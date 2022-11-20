@@ -1,0 +1,16 @@
+version: 1
+receiverHealth:
+  url: http://receiver:8080/health
+  service: receiver
+storageHealth:
+  url: http://storage:8090/health
+  service: storage
+processingHealth:
+  url: http://processing:8100/health
+  service: processing
+auditHealth:
+  url: http://audit_log:8110/health
+  service: audit
+scheduler:
+  period_sec: 20
+timeout: 5

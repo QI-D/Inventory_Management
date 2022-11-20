@@ -65,6 +65,10 @@ def revenue_event(index):
 
     return {"message": "Not Found"}, 404
 
+def health():
+
+    return 200
+
 
 app = connexion.FlaskApp(__name__, specification_dir='')
 

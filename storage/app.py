@@ -152,6 +152,12 @@ def process_messages():
         # Commit the new message as being read
         consumer.commit_offsets()
 
+
+def health():
+
+    return 200
+
+
 app = connexion.FlaskApp(__name__, specification_dir='')
 app.add_api("openapi.yml", strict_validation=True, validate_responses=True)
 

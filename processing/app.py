@@ -141,6 +141,11 @@ def get_stats():
     return result, 200
 
 
+def health():
+
+    return 200
+
+
 app = connexion.FlaskApp(__name__, specification_dir='')
 
 CORS(app.app)

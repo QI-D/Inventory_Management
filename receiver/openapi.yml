@@ -53,6 +53,15 @@ paths:
               $ref: "#/components/schemas/reportEvent"
         description: revenue report
 
+  /health:
+    get:
+      summary: health check on the service
+      operationId: app.health
+      description: health check on the service
+      responses:
+        "200":
+          description: service is running
+
 components:
   schemas:
     expenseEvent:

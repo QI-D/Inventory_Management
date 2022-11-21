@@ -31,10 +31,10 @@ export default function EndpointHealth() {
     } else if (isLoaded === false){
         return(<div>Loading...</div>)
     } else if (isLoaded === true){
-        let last_updated = status['last_updated'].replace("T", " ").replace("Z", " ");
-        console.log("last_updated: " + last_updated)
-        console.log(new Date())
-        let time = Math.round((new Date().getTime() - new Date(last_updated).getTime()) / 10000)
+        let last_updated = new Date(status['last_updated'].replace("T", " ").replace("Z", " "));
+        last_updated.setHours(last_updated.getHours() - 8) // fix time zone
+        let curr_time = new Date()
+        let time = Math.round((curr_time - last_updated) / 1000)
         return(
             <div>
                 <table className={"StatsTable"}>

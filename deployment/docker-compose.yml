@@ -109,6 +109,12 @@ services:
 
   health_check:
     image: health_check:latest
+    environment:
+      - TARGET_ENV=test
+    volumes:
+      - /home/ubuntu/config/health:/config
+      - /home/ubuntu/logs:/logs
+      - health-db:/data
     ports:
       - "8120:8120"
 
@@ -116,3 +122,4 @@ services:
 volumes:
   my-db:
   processing-db:
+  health-db:

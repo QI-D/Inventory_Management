@@ -6,12 +6,12 @@ export default function EndpointHealth() {
     const [status, setStats] = useState({});
     const [error, setError] = useState(null)
 
-	const getStatus = () => {
-	
+    const getStatus = () => {
+
         fetch(`http://ec2-34-234-41-89.compute-1.amazonaws.com:8120/health`)
             .then(res => res.json())
             .then((result)=>{
-				console.log("Received Health Check")
+                console.log("Received Health Check")
                 setStats(result);
                 setIsLoaded(true);
             },(error) =>{
@@ -21,8 +21,8 @@ export default function EndpointHealth() {
     }
 
     useEffect(() => {
-		const interval = setInterval(() => getStatus(), 10000); // Update every 10 seconds
-		return() => clearInterval(interval);
+        const interval = setInterval(() => getStatus(), 10000); // Update every 10 seconds
+        return() => clearInterval(interval);
     }, [getStatus]);
 
 
@@ -38,11 +38,11 @@ export default function EndpointHealth() {
         return(
             <div>
                 <table className={"StatsTable"}>
-					<tbody>
-						<tr>
+                    <tbody>
+                        <tr>
                             <td>Receiver:</td>
-							<td>{status['receiver']}</td>
-						</tr>
+                            <td>{status['receiver']}</td>
+                        </tr>
                         <tr>
                             <td>Storage:</td>
                             <td>{status['storage']}</td>
@@ -59,7 +59,7 @@ export default function EndpointHealth() {
                             <td>Last Updated:</td>
                             <td>{time}s ago</td>
                         </tr>
-					</tbody>
+                    </tbody>
                 </table>
 
             </div>

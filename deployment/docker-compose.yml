@@ -7,6 +7,8 @@ services:
     hostname: zookeeper
     volumes:
       - /home/ubuntu/zookeeper/data:/opt/zookeeper-3.4.13/data
+    networks:
+      - "api.network"
   kafka:
     image: wurstmeister/kafka
     command: [start-kafka.sh]
@@ -28,6 +30,8 @@ services:
       - /home/ubuntu/kafka:/kafka/kafka-logs
     depends_on:
       - "zookeeper"
+    networks:
+      - "api.network"
   db:
     image: mysql:5.7
     restart: always
@@ -48,6 +52,8 @@ services:
     # Where our data will be persisted
     volumes:
     - my-db:/var/lib/mysql
+    networks:
+      - "api.network"
 
   receiver:
     depends_on:

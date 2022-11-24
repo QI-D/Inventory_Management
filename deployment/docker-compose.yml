@@ -60,6 +60,8 @@ services:
       - /home/ubuntu/logs:/logs
     ports:
       - "8080:8080"
+    networks:
+      - "api.network"
 
   storage:
     depends_on:
@@ -73,6 +75,8 @@ services:
       - /home/ubuntu/logs:/logs
     ports:
       - "8090:8090"
+    networks:
+      - "api.network"
 
   processing:
     depends_on:
@@ -86,6 +90,8 @@ services:
       - processing-db:/data
     ports:
       - "8100:8100"
+    networks:
+      - "api.network"
 
   audit_log:
     depends_on:
@@ -98,6 +104,8 @@ services:
       - /home/ubuntu/logs:/logs
     ports:
       - "8110:8110"
+    networks:
+      - "api.network"
 
   dashboard:
     image: dashboard:latest
@@ -106,6 +114,8 @@ services:
     depends_on:
       - "processing"
       - "audit_log"
+    networks:
+      - "api.network"
 
   health_check:
     image: health_check:latest
@@ -117,9 +127,29 @@ services:
       - health-db:/data
     ports:
       - "8120:8120"
+    networks:
+      - "api.network"
+
+  nginx:
+    image: nginx
+    volumes:
+      - /home/ubuntu/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - receiver
+      - storage
+      - processing
+      - audit_log
+      - dashboard
+    ports:
+      - "80:80"
+    networks:
+      - "api.network"
 
 # Names our volume
 volumes:
   my-db:
   processing-db:
   health-db:
+
+networks:
+  api.network:
